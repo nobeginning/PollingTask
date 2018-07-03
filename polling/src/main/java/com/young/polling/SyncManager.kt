@@ -27,7 +27,7 @@ object SyncManager {
         fun getPollingCompleteCallback(): PollingFutureTask.PollingCompleteCallback<T>
         fun doInTask(): T
         fun getLifecycleOwner(): LifecycleOwner
-        fun continuePolling(): Boolean
+        fun continuePolling(taskId: String): Boolean
     }
 
     private val obs = object : LifecycleObserver {
@@ -84,8 +84,8 @@ object SyncManager {
                 return taskInfo.doInTask()
             }
 
-            override fun continuePolling(): Boolean {
-                return taskInfo.continuePolling()
+            override fun continuePolling(taskId: String): Boolean {
+                return taskInfo.continuePolling(taskId)
             }
         }
         val futureTask = PollingFutureTask<T>(t, doneCallback, lifecycleOwner)

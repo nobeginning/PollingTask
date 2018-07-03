@@ -27,13 +27,13 @@ abstract class AbstractSyncTask<T>(
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun run() {
-        while (continuePolling() && (pollingCount == SyncManager.POLLING_NEVER_STOP || count <= pollingCount)) {
+        while (continuePolling(tId) && (pollingCount == SyncManager.POLLING_NEVER_STOP || count <= pollingCount)) {
             lastPollingResult = doTask()
             pollingResultCallback?.apply {
                 mainHandler.post { onPollingResult(tId, lastPollingResult) }
             }
             count++
-            if (!continuePolling() || (pollingCount != SyncManager.POLLING_NEVER_STOP && count > pollingCount)) {
+            if (!continuePolling(tId) || (pollingCount != SyncManager.POLLING_NEVER_STOP && count > pollingCount)) {
                 break
             }
             Thread.sleep(timeInterval)
@@ -45,6 +45,6 @@ abstract class AbstractSyncTask<T>(
 
     abstract fun doTask(): T
 
-    abstract fun continuePolling(): Boolean
+    abstract fun continuePolling(tId: String): Boolean
 
 }
