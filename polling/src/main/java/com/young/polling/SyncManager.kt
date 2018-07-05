@@ -12,8 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor
  */
 object SyncManager {
 
-    public const val POLLING_NEVER_STOP = -1
-
+    const val POLLING_NEVER_STOP = -1
 
     interface TaskInfo<T> {
         fun getTaskId(): String
@@ -23,8 +22,8 @@ object SyncManager {
         fun getPollingCount(): Int
 
         fun getTimeInterval(): Long
-        fun getPollingResultCallback(): PollingFutureTask.PollingResultCallback<T>
-        fun getPollingCompleteCallback(): PollingFutureTask.PollingCompleteCallback<T>
+        fun getPollingResultCallback(): PollingFutureTask.PollingResultCallback<T>?
+        fun getPollingCompleteCallback(): PollingFutureTask.PollingCompleteCallback<T>?
         fun doInTask(): T
         fun getLifecycleOwner(): LifecycleOwner
         fun continuePolling(taskId: String): Boolean
@@ -66,12 +65,12 @@ object SyncManager {
         } else {
             futureTask = buildTask(taskInfo, lifecycleOwner)
             threadPool.submit(futureTask)
-            tasksById.put(taskInfo.getTaskId(), futureTask)
+            tasksById[taskInfo.getTaskId()] = futureTask
         }
         var list = tasksByLifecycle[lifecycleOwner]
         if (list == null) {
             list = mutableListOf()
-            tasksByLifecycle.put(lifecycleOwner, list)
+            tasksByLifecycle[lifecycleOwner] = list
         }
         list.add(futureTask)
     }

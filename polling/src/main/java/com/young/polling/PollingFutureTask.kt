@@ -42,9 +42,9 @@ class PollingFutureTask<T>(private val task: IRealTask,
     fun addPollingResultCallback(lifecycleOwner: LifecycleOwner, pollingResultCallback: PollingResultCallback<T>?) {
         if (pollingResultCallback != null) {
             var list = callbacks[lifecycleOwner]
-            if (list==null){
+            if (list == null) {
                 list = mutableSetOf()
-                callbacks.put(lifecycleOwner, list)
+                callbacks[lifecycleOwner] = list
             }
             list.add(pollingResultCallback)
         }
@@ -53,9 +53,9 @@ class PollingFutureTask<T>(private val task: IRealTask,
     fun addPollingCompleteCallback(lifecycleOwner: LifecycleOwner, pollingCompleteCallback: PollingCompleteCallback<T>?) {
         if (pollingCompleteCallback != null) {
             var list = completeCallbacks[lifecycleOwner]
-            if (list==null){
+            if (list == null) {
                 list = mutableSetOf()
-                completeCallbacks.put(lifecycleOwner, list)
+                completeCallbacks[lifecycleOwner] = list
             }
             list.add(pollingCompleteCallback)
         }
@@ -107,7 +107,7 @@ class PollingFutureTask<T>(private val task: IRealTask,
         doneCallback?.onDone(task.getTaskId())
     }
 
-    private fun clearCallbacks(lifecycleOwner: LifecycleOwner){
+    private fun clearCallbacks(lifecycleOwner: LifecycleOwner) {
         callbacks.remove(lifecycleOwner)
         completeCallbacks.remove(lifecycleOwner)
     }

@@ -7,7 +7,7 @@ import android.os.Looper
  * Created by young on 2018/7/2.
  */
 abstract class AbstractSyncTask<T>(
-        val tId: String,
+        private val tId: String,
         private val pollingCount: Int,
         private val timeInterval: Long,
         var pollingResultCallback: PollingResultCallback<T>? = null,
